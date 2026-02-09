@@ -1,5 +1,5 @@
 <?php
-	session_start();
+    session_start();
 ?>
 <!doctype html>
 <html>
@@ -12,11 +12,11 @@
 <h1>a.php</h1>
 
 <?php
-	$_SESSION['name']='รพีพงศ์ โชพลกัง';
-	$_SESSION['nickname']='รพี';
-	
-	echo $_SESSION['name']."<br>";
-	echo $_SESSION['nickname']."<br>";
+    $_SESSION['name']='รพีพงศ์ โชพลกัง';
+    $_SESSION['nickname']='รพี';
+    
+    echo $_SESSION['name']."<br>";
+    echo $_SESSION['nickname']."<br>";
 ?>
 </body>
 </html>

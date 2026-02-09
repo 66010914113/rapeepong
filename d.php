@@ -1,5 +1,5 @@
 <?php
-	session_start();
+    session_start();
 ?>
 <!doctype html>
 <html>
@@ -12,8 +12,8 @@
 <h1>d.php</h1>
 
 <?php
-	unset($_SESSION['name']);
-	unset($_SESSION['nickname']);
+    unset($_SESSION['name']);
+    unset($_SESSION['nickname']);
 ?>
 </body>
 </html>

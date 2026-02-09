@@ -1,5 +1,5 @@
 <?php
-    // เรียกใช้ไฟล์ตรวจสอบ Login
+    // เรียกใช้ไฟล์ตรวจสอบ Login (ในไฟล์นี้มี session_start() แล้ว)
     include_once("check_login.php");
 ?>
 <!doctype html>
@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>จัดการออเดอร์ - Admin Dashboard</title>
+    <title>จัดการสินค้า - Admin Dashboard</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -16,10 +16,10 @@
     <style>
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #f5f7fa;
+            background-color: #f5f7fa; /* สีพื้นหลังเดียวกับ Dashboard */
         }
         
-        /* Sidebar Styling (คงเดิมเพื่อให้เหมือนหน้าอื่น) */
+        /* Sidebar Styling (เหมือนหน้า Index2) */
         .sidebar {
             background-color: #ffffff;
             min-height: 100vh;
@@ -44,7 +44,6 @@
             transform: translateX(5px);
         }
         
-        /* Active State */
         .sidebar .nav-link.active {
             background-color: #e7f1ff;
             color: #0d6efd;
@@ -54,6 +53,14 @@
         .sidebar .nav-link i {
             font-size: 1.2rem;
             margin-right: 15px;
+        }
+
+        /* Product Table Styling */
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -97,11 +104,11 @@
                         <i class="bi bi-grid-1x2"></i> แดชบอร์ด
                     </a>
                     
-                    <a href="product.php" class="nav-link">
+                    <a href="product.php" class="nav-link active">
                         <i class="bi bi-box-seam"></i> จัดการสินค้า
                     </a>
                     
-                    <a href="orders.php" class="nav-link active">
+                    <a href="orders.php" class="nav-link">
                         <i class="bi bi-cart-check"></i> จัดการออเดอร์
                     </a>
                     
@@ -119,26 +126,22 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4 pb-5">
                 
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom">
-                    <h1 class="h3 fw-bold text-dark">รายการคำสั่งซื้อ (Orders)</h1>
+                    <h1 class="h3 fw-bold text-dark">จัดการสินค้า (Products)</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="#" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> เพิ่มสินค้าใหม่
+                        </a>
+                    </div>
                 </div>
 
                 <div class="card border-0 shadow-sm rounded-4">
                     <div class="card-body">
                         
                         <div class="row mb-3 g-2">
-                            <div class="col-md-3">
-                                <select class="form-select bg-light">
-                                    <option selected>สถานะทั้งหมด</option>
-                                    <option value="1">รอชำระเงิน</option>
-                                    <option value="2">ชำระแล้ว/กำลังเตรียมของ</option>
-                                    <option value="3">จัดส่งแล้ว</option>
-                                    <option value="0">ยกเลิก</option>
-                                </select>
-                            </div>
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
-                                    <input type="text" class="form-control border-start-0 bg-light" placeholder="ค้นหาเลขที่ออเดอร์ หรือ ชื่อลูกค้า...">
+                                    <input type="text" class="form-control border-start-0 bg-light" placeholder="ค้นหาสินค้า...">
                                 </div>
                             </div>
                         </div>
@@ -147,53 +150,52 @@
                             <table class="table table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th scope="col">#เลขที่คำสั่งซื้อ</th>
-                                        <th scope="col">ชื่อลูกค้า</th>
-                                        <th scope="col">วันที่สั่งซื้อ</th>
-                                        <th scope="col">ยอดรวม</th>
-                                        <th scope="col">สถานะ</th>
+                                        <th scope="col" width="10%">รูปภาพ</th>
+                                        <th scope="col" width="30%">ชื่อสินค้า</th>
+                                        <th scope="col">หมวดหมู่</th>
+                                        <th scope="col">ราคา</th>
+                                        <th scope="col">คงเหลือ</th>
                                         <th scope="col" class="text-end">จัดการ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="fw-bold text-primary">ORD-00105</td>
-                                        <td>คุณสมหญิง รักดี</td>
-                                        <td>25 ต.ค. 66 <small class="text-muted">10:30 น.</small></td>
-                                        <td class="fw-bold">1,250 ฿</td>
-                                        <td><span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>รอชำระเงิน</span></td>
+                                        <td>
+                                            <img src="https://via.placeholder.com/150" alt="Product" class="product-img">
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold">เสื้อยืด Cotton 100%</div>
+                                            <small class="text-muted">รหัส: PD-001</small>
+                                        </td>
+                                        <td>เสื้อผ้าแฟชั่น</td>
+                                        <td class="text-success fw-bold">250 ฿</td>
+                                        <td><span class="badge bg-success">100 ชิ้น</span></td>
                                         <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary me-1" title="ดูรายละเอียด"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger" title="ยกเลิก"><i class="bi bi-x-circle"></i></button>
+                                            <a href="#" class="btn btn-sm btn-outline-warning me-1"><i class="bi bi-pencil"></i></a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger" onclick="return confirm('ยืนยันการลบ?')"><i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <td class="fw-bold text-primary">ORD-00104</td>
-                                        <td>คุณมานะ อดทน</td>
-                                        <td>24 ต.ค. 66 <small class="text-muted">14:15 น.</small></td>
-                                        <td class="fw-bold">590 ฿</td>
-                                        <td><span class="badge bg-info"><i class="bi bi-box-seam me-1"></i>เตรียมจัดส่ง</span></td>
+                                        <td>
+                                            <img src="https://via.placeholder.com/150" alt="Product" class="product-img">
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold">กางเกงยีนส์ขาสั้น</div>
+                                            <small class="text-muted">รหัส: PD-002</small>
+                                        </td>
+                                        <td>กางเกง</td>
+                                        <td class="text-success fw-bold">450 ฿</td>
+                                        <td><span class="badge bg-danger">5 ชิ้น</span></td>
                                         <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary me-1" title="ดูรายละเอียด"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-success" title="แจ้งเลขพัสดุ"><i class="bi bi-truck"></i></button>
+                                            <a href="#" class="btn btn-sm btn-outline-warning me-1"><i class="bi bi-pencil"></i></a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger" onclick="return confirm('ยืนยันการลบ?')"><i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="fw-bold text-primary">ORD-00103</td>
-                                        <td>คุณวิชัย ใจดี</td>
-                                        <td>23 ต.ค. 66 <small class="text-muted">09:00 น.</small></td>
-                                        <td class="fw-bold">2,400 ฿</td>
-                                        <td><span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>จัดส่งแล้ว</span></td>
-                                        <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary me-1" title="ดูรายละเอียด"><i class="bi bi-eye"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
-
+                        
                         <nav aria-label="Page navigation" class="mt-3">
                             <ul class="pagination justify-content-end">
                                 <li class="page-item disabled"><a class="page-link" href="#">ก่อนหน้า</a></li>

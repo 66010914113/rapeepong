@@ -1,11 +1,10 @@
 <?php
 	session_start();
-	
-		unset($_SESSION['a_id']);
-		unset($_SESSION['a_name']);
+	unset($_SESSION['aid']);
+	unset($_SESSION['aname']);
+		echo "<script>";
+		echo "window.location='index.php';";
+		echo "</script>";
 		
-		echo"<script>";
-		echo"window.location='index.php'";
-		echo"</script>";
+	
 ?>
-

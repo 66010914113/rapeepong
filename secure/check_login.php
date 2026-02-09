@@ -1,10 +1,9 @@
 <?php
-	session_start();
+    session_start();
 	
-	if(empty($_SESSION['a_id'])){
-		echo"Access Denied!!!";
-		echo"<meta http-equiv='refresh' content='3; url=index.php'>";
+	if(empty($_SESSION['aid'])){
+		echo "Access Denied !!! ";
+		"<meta http-equiv='refresh' content='3; url=index.php'>";
 		exit;
-		}
-	
+	}
 ?>

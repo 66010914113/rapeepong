@@ -1,19 +1,19 @@
 <?php
-	session_start();
+    session_start();
 ?>
 <!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>รพีพงศ์ โชพลกัง(รพี)</title>
+<title>อมรรัตน์ ทองอินทา(หมิว)</title>
 </head>
 
 <body>
-<h1>c.php</h1>
+<h1>d.php</h1>
 
 <?php
-	echo @$_SESSION['name']."<br>";
-	echo @$_SESSION['nickname']."<br>";
+    unset($_SESSION['name']);
+    unset($_SESSION['nickname']);
 ?>
 </body>
 </html>
